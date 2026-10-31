@@ -5,8 +5,9 @@ class AgentConfig(BaseModel):
     # Sui Network RPC
     sui_rpc_url: str = os.getenv("SUI_RPC_URL", "https://fullnode.mainnet.sui.io:443")
     
-    # Package & Object IDs (populated upon deployment)
-    package_id: str = os.getenv("PACKAGE_ID", "0x0")
+    # Package & Object IDs (Mainnet Deployed)
+    package_id: str = os.getenv("PACKAGE_ID", "0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba")
+    agent_coin_type: str = os.getenv("AGENT_COIN_TYPE", "0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba::agent::AGENT")
     wallet_object_id: str = os.getenv("WALLET_OBJECT_ID", "0x0")
     agent_cap_id: str = os.getenv("AGENT_CAP_ID", "0x0")
     
