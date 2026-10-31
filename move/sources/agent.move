@@ -3,6 +3,7 @@
 
 /// Module defining the apex DeFAI native token `$AGENT` on Sui Move 2024.
 /// Designed for autonomous liquidity, agent treasury management, and PTB execution.
+#[allow(deprecated_usage)]
 module sui_ai_agent_starter::agent {
     use sui::coin::{Self, TreasuryCap};
     use sui::url;
@@ -19,7 +20,7 @@ module sui_ai_agent_starter::agent {
             b"AGENT",
             b"Sui Agent",
             b"The flagship DeFAI autonomous agent token on Sui Move 2024. Powered by SpendingLimitCap and atomic PTB execution.",
-            option::some(url::new_unsafe_from_bytes(b"https://github.com/bulletkh/sui-ai-agent-starter")),
+            option::some(url::new_unsafe_from_bytes(b"https://raw.githubusercontent.com/bulletkh/sui-ai-agent-starter/main/assets/agent_logo.png")),
             ctx,
         );
 
@@ -31,7 +32,7 @@ module sui_ai_agent_starter::agent {
     }
 
     /// Mint new AGENT tokens (restricted to TreasuryCap holder)
-    public entry fun mint(
+    public fun mint(
         treasury_cap: &mut TreasuryCap<AGENT>,
         amount: u64,
         recipient: address,
@@ -42,7 +43,7 @@ module sui_ai_agent_starter::agent {
     }
 
     /// Burn AGENT tokens to enforce autonomous deflation from agent trading profits
-    public entry fun burn(
+    public fun burn(
         treasury_cap: &mut TreasuryCap<AGENT>,
         coin: coin::Coin<AGENT>,
     ) {

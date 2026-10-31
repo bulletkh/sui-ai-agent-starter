@@ -1,17 +1,10 @@
+// Copyright (c) SUI World Research
+// SPDX-License-Identifier: Apache-2.0
+
 module sui_ai_agent_starter::agent_wallet {
-    use sui::object::{Self, UID, ID};
-    use sui::tx_context::{Self, TxContext};
     use sui::coin::{Self, Coin};
     use sui::balance::{Self, Balance};
-    use sui::transfer;
     use sui::event;
-    use sui_ai_agent_starter::events::{
-        AgentWalletCreated,
-        ActionExecuted,
-        BudgetRefilled,
-        EmergencyHaltToggled,
-        SpendingLimitUpdated
-    };
 
     // Error Codes
     const ESpendingLimitExceeded: u64 = 1;
@@ -19,6 +12,46 @@ module sui_ai_agent_starter::agent_wallet {
     const EInvalidAgentCap: u64 = 3;
     const EInsufficientFunds: u64 = 4;
     const EZeroAmount: u64 = 5;
+
+    // =========================================================================
+    // EVENTS
+    // =========================================================================
+
+    public struct AgentWalletCreated has copy, drop {
+        wallet_id: ID,
+        admin: address,
+        agent_id: address,
+        daily_limit: u64,
+    }
+
+    public struct ActionExecuted has copy, drop {
+        wallet_id: ID,
+        amount: u64,
+        remaining_budget: u64,
+        recipient: address,
+        epoch: u64,
+    }
+
+    public struct BudgetRefilled has copy, drop {
+        wallet_id: ID,
+        new_budget: u64,
+        epoch: u64,
+    }
+
+    public struct EmergencyHaltToggled has copy, drop {
+        wallet_id: ID,
+        is_halted: bool,
+    }
+
+    public struct SpendingLimitUpdated has copy, drop {
+        wallet_id: ID,
+        old_limit: u64,
+        new_limit: u64,
+    }
+
+    // =========================================================================
+    // CAPABILITIES & OBJECTS
+    // =========================================================================
 
     /// Admin capability granting master custody and parameter configuration.
     public struct AdminCap has key, store {
@@ -43,7 +76,8 @@ module sui_ai_agent_starter::agent_wallet {
     }
 
     /// Creates a new AgentWallet treasury with an AdminCap and an AgentCap.
-    public entry fun create_wallet<T>(
+    #[allow(lint(self_transfer))]
+    public fun create_wallet<T>(
         initial_funds: Coin<T>,
         daily_limit: u64,
         agent_recipient: address,
@@ -51,14 +85,14 @@ module sui_ai_agent_starter::agent_wallet {
     ) {
         let wallet_uid = object::new(ctx);
         let wallet_id = object::uid_to_inner(&wallet_uid);
-        let admin = tx_context::sender(ctx);
+        let admin = ctx.sender();
 
         let wallet = AgentWallet<T> {
             id: wallet_uid,
             balance: coin::into_balance(initial_funds),
             daily_limit,
             spent_this_epoch: 0,
-            last_refill_epoch: tx_context::epoch(ctx),
+            last_refill_epoch: ctx.epoch(),
             is_halted: false,
         };
 
@@ -79,8 +113,8 @@ module sui_ai_agent_starter::agent_wallet {
             daily_limit,
         });
 
-        transfer::transfer(admin_cap, admin);
-        transfer::transfer(agent_cap, agent_recipient);
+        transfer::public_transfer(admin_cap, admin);
+        transfer::public_transfer(agent_cap, agent_recipient);
         transfer::share_object(wallet);
     }
 
@@ -96,7 +130,7 @@ module sui_ai_agent_starter::agent_wallet {
         assert!(cap.wallet_id == object::id(wallet), EInvalidAgentCap);
         assert!(amount > 0, EZeroAmount);
 
-        let current_epoch = tx_context::epoch(ctx);
+        let current_epoch = ctx.epoch();
 
         // Auto-refill budget if a new epoch has started
         if (current_epoch > wallet.last_refill_epoch) {
@@ -124,7 +158,7 @@ module sui_ai_agent_starter::agent_wallet {
             wallet_id: object::id(wallet),
             amount,
             remaining_budget,
-            recipient: tx_context::sender(ctx),
+            recipient: ctx.sender(),
             epoch: current_epoch,
         });
 
@@ -132,7 +166,7 @@ module sui_ai_agent_starter::agent_wallet {
     }
 
     /// Deposit additional funds into the AgentWallet treasury.
-    public entry fun deposit<T>(
+    public fun deposit<T>(
         wallet: &mut AgentWallet<T>,
         funds: Coin<T>,
         _ctx: &mut TxContext
@@ -145,7 +179,7 @@ module sui_ai_agent_starter::agent_wallet {
     // =========================================================================
 
     /// Emergency switch: Freeze/unfreeze agent execution immediately.
-    public entry fun toggle_emergency_halt<T>(
+    public fun toggle_emergency_halt<T>(
         wallet: &mut AgentWallet<T>,
         cap: &AdminCap,
         halt: bool,
@@ -160,7 +194,7 @@ module sui_ai_agent_starter::agent_wallet {
     }
 
     /// Update the daily spending limit.
-    public entry fun set_daily_limit<T>(
+    public fun set_daily_limit<T>(
         wallet: &mut AgentWallet<T>,
         cap: &AdminCap,
         new_limit: u64,
