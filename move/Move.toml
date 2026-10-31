@@ -1,0 +1,10 @@
+[package]
+name = "sui_ai_agent_starter"
+edition = "2024.beta" # Move 2024 Edition
+version = "0.1.0"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet" }
+
+[addresses]
+sui_ai_agent_starter = "0x0"
