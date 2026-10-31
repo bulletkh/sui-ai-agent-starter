@@ -11,6 +11,17 @@ Developed by **SUI World Research** (`@suiprofile` / `@suiworld_ai`) as part of 
 
 ---
 
+## 🚀 Live Mainnet Deployments
+
+| Asset | Identifier / Type | Explorer |
+| :--- | :--- | :--- |
+| **Package ID** | `0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba` | [SuiScan](https://suiscan.xyz/mainnet/object/0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba) |
+| **$AGENT Token** | `0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba::agent::AGENT` | [SuiVision](https://suivision.xyz/coin/0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba::agent::AGENT) |
+| **Deploy Transaction** | `Fisqb2v1DbRYaFfj7ajMRmPxXnSL3mB7EnNfV2StPdxm` | [View Tx](https://suiscan.xyz/mainnet/tx/Fisqb2v1DbRYaFfj7ajMRmPxXnSL3mB7EnNfV2StPdxm) |
+| **Initial Supply** | `1,000,000,000 $AGENT` (9 Decimals) | Verified Immutable Metadata |
+
+---
+
 ## 🏛 Architecture Overview
 
 ```mermaid
