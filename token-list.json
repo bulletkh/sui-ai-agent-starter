@@ -1,0 +1,19 @@
+{
+  "name": "Sui Agent",
+  "symbol": "AGENT",
+  "decimals": 9,
+  "coinType": "0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba::agent::AGENT",
+  "packageId": "0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba",
+  "iconUrl": "https://raw.githubusercontent.com/bulletkh/sui-ai-agent-starter/main/assets/agent_logo.png",
+  "description": "The flagship DeFAI autonomous agent token on Sui Move 2024. Powered by SpendingLimitCap and atomic PTB execution.",
+  "verified": true,
+  "links": {
+    "website": "https://github.com/bulletkh/sui-ai-agent-starter",
+    "twitter": "https://x.com/suiprofile",
+    "telegram": "https://t.me/suiworld_ai",
+    "explorer_suivision": "https://suivision.xyz/coin/0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba::agent::AGENT",
+    "explorer_suiscan": "https://suiscan.xyz/mainnet/object/0xdd6e0aabe4cac474cb85cc2955a84ef1f189300aeeb0a85aaa56c5442be46eba"
+  },
+  "totalSupply": 1000000000,
+  "standard": "Move 2024"
+}
